@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        v-model数据的双向绑定
+        input-text文本输入框,设置v-model绑定一个data数据里面的值,然后input框的内容改变,传递到data数据里面,导致页面span显示的内容也跟着改变
+        textarea多行输入文本,多行输入框里面的输入的数据也会保存到data上,然后影响页面的内容
+        input-checkbox多选框,当选中该选项时,将该选项的value值的内容保存到data中,然后data数据渲染到页面
+        input-radio单选框,当选中该选项时,里面的value值会保存到data数据中然后渲染到页面
+        selected下拉列表,当选中所选选项时,value值传入data数据,然后渲染到页面上
+     -->
+    <div id="app">
+        <input type="text" v-model="inputText">
+        <span>{{inputText}}</span>
+
+        <textarea v-model="textarea"></textarea>
+        <span>{{textarea}}</span>
+
+        <label for="apple">苹果</label>
+        <input type="checkbox" id="apple" value="苹果" v-model="inputCheckbox">
+        <label for="banana">香蕉</label>
+        <input type="checkbox" id="banana" value="香蕉" v-model="inputCheckbox">
+        <label for="water">水</label>
+        <input type="checkbox" id="water" value="水" v-model="inputCheckbox">
+        <span>{{inputCheckbox}}</span>
+
+        <label for="one">one</label>
+        <input type="radio" id="one" value="one" v-model="inputRadio">
+        <label for="two">two</label>
+        <input type="radio" id="two" value="two" v-model="inputRadio">
+        <span>{{inputRadio}}</span>
+
+        <!-- 选择单个选项,用字符串接收 -->
+        <select name="" id="" v-model="selected1">
+            <option value="" disabled>请选择</option>
+            <option value="选项一">选项一</option>
+            <option value="选项二">选项二</option>
+            <option value="选项三">选项三</option>
+        </select>
+        <span>{{selected1}}</span>
+
+        <!-- 选择多个选项,用数组接收,设置为multiple可以多选 -->
+        <select name="" id="" v-model="selected2" multiple>
+            <option value="" disabled>请选择</option>
+            <option value="选项一">选项一</option>
+            <option value="选项二">选项二</option>
+            <option value="选项三">选项三</option>
+        </select>
+        <span>{{selected2}}</span>
+    </div>
+    <script>
+        const vm  = new Vue({
+            el : '#app',
+            data : {
+                inputText : 'shanshan',
+                textarea : 'shanshan',
+                inputCheckbox : [],
+                inputRadio : '',
+                selected1 : '',
+                selected2 : []
+            }
+        })
+    </script>
+</body>
+</html>

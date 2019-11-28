@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>Document</title>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+        [v-html]{
+            color : #abcdef;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 指令
+    1.  v-pre  将页面中的差值表达式原样输出,不会计算data里面的值 div输出{{ name }}而不是huhao
+    2.  v-cloak 配合css会将页面初始的闪现一下效果取消
+    3.  v-once  绑定在div元素身上,那么改变div里面的数据页面也不会重新渲染和改变,这时取得值是缓存里面的值,不是data里面的值
+    4.  v-html  等价于innerHTML,直接传入data里面的数据就可以渲染到页面当中
+    5.  v-text  等价于innerText,也是可以将数据渲染到页面中,但是渲染的数据会将写入到div里面的数据覆盖
+    6.  v-if    判断元素显示还是隐藏,接收一个布尔值,为true时显示,为false时隐藏  判断多个元素时外面嵌套一个标签进行判断,外面用template标签不会真实出现其嵌套的标签结构
+    7.  v-else  和v-if是一组,v-if是true的话就执行,如果是false的话就执行else里面的内容
+    8.  v-else-if 和v-if一起做判断,条件满足v-if的话选择v-if,否则条件满足选择v-else-if,否则就选择v-else
+    9.  v-show  也是判断元素显示还是隐藏,当为true时就显示元素
+
+    v-if和v-show的区别:1.v-if是false时直接删除元素,元素结构消失在页面里,v-show是设置css样式的display为none
+                      2.v-if可以使用template在外面嵌套,让里面的值一起做判断,但是v-show对template没有作用,不能一起判断
+
+    -->
+    <div id="app">
+        <div v-pre>
+            {{ name }}
+        </div>
+        <div v-once>
+            {{ name }}
+        </div>
+        <div>{{ name }}</div>
+        {{ desc }}
+        <div v-html='dom'></div>
+        <div v-text="dom"></div>
+
+        <template v-if='flag'>
+            <div>{{name}}</div>
+            <div>{{desc}}</div>
+        </template>
+
+        <div v-if="!flag">{{name}}</div>
+        <div v-else>{{desc}}</div>
+    </div>
+    <script>
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                name : 'huhao',
+                desc : 'hope',
+                dom : '<div>woshishanshan,beautiful</div>',
+                flag : true
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- {{person}} -->
+        {{watchPerson}}
+        <!-- {{ name }} -->
+    </div>
+    <script>
+        // 如果有三个相同的属性名称,那么在页面中差值表达式执行的时候,先查找data数据里面的,在查找methods里面的,最后在查找computed里面的
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                name : 'shanshan',
+                age : 18,
+                msg : 'hello',
+                watchPerson : ''
+            },
+            methods : {
+
+            },
+            // computed计算属性 有函数形式和对象形式
+            computed : {
+                // 函数形式
+                // 页面中直接用插值表达式写上函数的名称person就可以将返回值渲染到页面上了
+                // 当vm.name改变的是该函数中要在页面返回的数据的话,就会打印computed,如果是改变的非该函数属性例如msg就不会打印computed
+                // 相当于做了一层缓存,如果函数里的name和age属性不发生改变的话,函数也就不会执行
+                // person() {
+                //     console.log('computed');
+                //     return `姓名:${this.name},年龄:${this.age}`
+                // }
+
+                // 对象形式
+                // person : {
+                //     get() {//对象形式的get方法就相当于函数形式中的person函数
+                //         return `姓名:${this.name},年龄:${this.age}`
+                //     },
+                //     set(val) {//这里的val值就是设置的vm.person的值,返回到val中接收 但是不会改变person中的数据
+                //         console.log(val)
+                //     }
+                // }
+            },
+            // 侦听器  监视的是data里面的数据例如name,age等  
+            // 在Vue里面配置watch分为函数形式和对象形式  在外面用实例方法$watch也可以配置
+            watch : {
+                // 函数形式
+                // name(newVal) {//当name值发生变化的时候执行该函数 vm.name = 'duyi'然后执行该函数打印'name' newVal值是通过vm.name改变的值
+                //     console.log('name')
+                //     // 当改变姓名值时,该watchPerson传递数据,然后再页面渲染
+                //     setTimeout(() => {
+                //         this.watchPerson = `姓名:${this.name},年龄:${this.age}`
+
+                //     },2000)
+                // },
+                // age() {
+                //     console.log('age')
+                //     // 当改变年龄值时,该watchPerson传递数据,然后再页面渲染
+                //     this.watchPerson = `姓名:${this.name},年龄:${this.age}`
+                // }
+
+                // 对象形式
+                // name : {
+                //     handler(newVal) {//这里的handler函数就相当于侦听器函数形式的函数
+                //         setTimeout(() => {//侦听器实现异步操作,延迟2s然后显示数据在页面  而计算属性不能实现异步操作
+                //             this.watchPerson = `姓名:${this.name},年龄:${this.age}`
+                //         }, 2000);
+                //     },
+                //     immediate : true//设置immediate为true就是一开始加载页面时就将数据显示在页面上
+                //                     //没有immediate时watchPerson为空,页面上不会显示数据,设置immediate就是先将handler函数执行一次,然后watchPerson有数据了就可以渲染
+            
+                // },
+                // age : {
+                //     handler() {
+                //         this.watchPerson = `姓名:${this.name},年龄:${this.age}`
+                //     }
+                // }
+            }
+        })
+
+        // 在外面配置侦听器 第一个参数是监视data的哪一个数据  第二个参数是name数据改变时发生的函数  第三个参数是配置信息,设置初始加载先执行一次函数就可以显示数据
+        // vm.$watch('name',()=>{
+        //     console.log('name')
+        // },{
+        //     immediate : true
+        // })
+        /*计算属性与侦听器的区别
+        1.计算属性一次可以观察多个值,将data里的数据放在一个返回值里,而侦听器只能一次观察一个数据的改变
+        2.计算属性computed是生成相当于一个新的data数据person然后在页面中调用这个属性就可以,而侦听器watch是监视的data里面有的数据name,age等
+        3.侦听器实现异步操作,延迟2s然后显示数据在页面,而计算属性不能实现异步操作
+        */
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        计算相加: <input type="text" v-model.number="firstNum"> + <input type="text" v-model.number="lastNum">
+        <br>
+        计算结果: <input type="text" v-model="sum">
+    </div>
+    <script>
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                firstNum : null,
+                lastNum : null
+            },
+            computed : {
+                sum : {
+                    get() {
+                        return this.firstNum + this.lastNum
+                    },
+                    set(val) {
+                        const avg = val / 2;//将结果设置的值获取回来求平均值然后返回到前两个输入框
+                        this.firstNum = avg;
+                        this.lastNum = avg;
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        Vue构造函数提供了方法directive,可以自定义全局指令,在每一个元素身上都可以接管使用,还有局部指令,在new Vue里面新属性directives里设置
+        传入的第一个参数位指令的名称,使用指令时前面加一个v就可以
+        传入的第二个参数是一个函数,或者是一个对象       函数有三个参数el,bindings,vnode
+     -->
+    <div id="app">
+        <input type="text" v-slice:9.number="content" v-model="content">
+        <span>{{content}}</span>
+    </div>
+    <script>
+        // el是指令绑定的元素 input框
+        /* bindings是绑定的信息 v-slice:9.number="content"
+        {
+            expression: "content"  指令绑定的哪一个data元素     这里是content
+            value: "jj"     绑定的data元素里面的值,绑定的是谁就是谁的值   这里是content的值'jj'
+            modifiers: {number: true}   代表指令使用了修饰符number
+            arg: "9"    在指令后面通过冒号传递参数在arg中显示  v-slice:9传递参数9
+        }
+        */
+        //vnode虚拟节点 context是一个Vue实例,通过vnode.context可以拿到下面的vue实例即vm    
+        Vue.directive('slice',(el,bindings,vnode) => {
+            console.log(bindings.value)//直接获取bindings的value值,就是绑定的数据content的值1
+            const context = vnode.context;
+            console.log(context[bindings.expression])//获取vnode的实例对象,vnode.context 在获取实例对象的content属性的值1
+            const val = bindings.value.slice(0,5)//从索引为0开始截取,一直截取5位为止
+            vnode.context.content = val;//把截取的值通过查找虚拟节点的值,然后改变,就可以让输入框只能输入5位
+        })
+        // 传入对象,上面的函数参数时对象参数里面的bind函数和update函数的结合
+        // Vue.directive('slice',{
+        //     // bind函数,初始绑定时执行的函数 只执行一次,当指令绑定给元素时
+        //     bind (el,bindings,vnode) {
+
+        //     },
+        //     // update是数据变化更新时执行的函数  虚拟dom改变更新时即content变化时渲染
+        //     update(el, bindings, vnode){
+        //         const val = bindings.value.slice(0,5);
+        //         vnode.context.content = val;
+        //     },
+        //     // inserted是指令绑定的元素插入到界面中执行的函数
+        //     inserted(el, bindings, vnode){
+        //         el.focus();//插入到页面时聚焦光标
+        //     }
+        // })
+        const vm =  new Vue({
+            el : '#app',
+            data : {
+                content : '1'
+            },
+            // 局部自定义指令
+            // directives : {
+            //     // 函数参数
+            //     slice : (el,bindings,vnode) => {
+
+            //     },
+            //     // 对象参数
+            //     slice1 : {
+            //         bind(el,bindings,vnode){
+
+            //         },
+            //         update(el, bindings, vnode) {
+
+            //         }
+            //     }
+            // }
+        })
+    </script>
+</body>
+</html>

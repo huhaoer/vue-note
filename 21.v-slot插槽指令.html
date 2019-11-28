@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .btn.success {
+            color: #fff;
+            background-color: green;
+        }
+        .btn.warning {
+            color: #fff;
+            background-color: yellow;
+        }
+        .btn.danger {
+            color: #fff;
+            background-color: red;
+        }
+        .btn.info {
+            color: #fff;
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <my-btn type="info">
+            aaa 
+            <template  #right><!-- v-slot:right等同于#right -->
+                bbb
+            </template>
+            ccc
+        </my-btn>
+        
+    </div>
+    <script>
+        // slot插槽,是一个标签  在组件标签之间写的内容,例如aaa和ccc会在默认的组件的插槽当中去
+        // 第一个组件默认名字时default <slot name="default"></slot>,会将组件标签中没有命名的内容例如aaa都添加到默认solt当中
+        // 给slot添加name值,<slot name="right"></slot>  然后在组件标签中使用template标签<template v-slot:right>bbb</template>将bbb内容换在name为right的插槽展示
+        // v-slot 简写方式#     v-bind简写方式:     v-on简写方式@
+
+        const vm = new Vue({
+            el : '#app',
+            components : {
+                myBtn : {
+                    props: ['type'],
+                    template : `<button class="btn" :class="type">
+                                    <slot name="default"></slot>
+                                    ----
+                                    <slot name="right"></slot>
+                                </button>`
+                }
+            }
+        })
+    </script>
+</body>
+</html>

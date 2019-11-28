@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 调用组件,使用组件名的标签就可以显示出组件模板中的数据 -->
+        <hello-world></hello-world>
+        
+    </div>
+    <script>
+        // 组件分为全局组件和局部组件,全局组件在每一个挂载的元素身上都可以使用,但是局部组件只能在当前挂载的元素身上使用
+        // 全局组件
+        // Vue.component('hello-world',{
+        //     template : '<div>你好</div>',//template作为组件的模板,在页面显示的标签
+        //     data() {//data是模板中所用到的数据,是一个函数返回一个对象,对象中就是data数据
+        //         return{
+        //             msg: 'shanshan'
+        //         }
+        //     }
+        // })
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                
+            },
+            // 局部组件,对应的是key-value值,前面是组件名,后面是组件的数据配置
+            components : {
+                helloWorld : {
+                    template : '<div>{{msg}}</div>',
+                    data() {
+                        return {
+                            msg : 'shanshanshan'
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- vue指令
+    1.v-for="(item, index) in arr" 循环数组,相当于forEach循环出ele和index,item是每一项的值,arr是要循环的数组 
+                        可以写成(item,index) in arr,将每一项和索引值都遍历出来
+                        循环的话还要添加一个key值属性,用v-bind:进行绑定,页面结构中不显示key,可以自己定义一个属性查看key值,必须是唯一值
+                        最好不用索引,用后台传来的数据的id或者其他的唯一值
+
+
+      v-for="(key, value) in obj"  遍历对象,和遍历数组一样,里面填写的变量就是对象的key和value值,遍历数组最好用item,index,遍历对象最好用key,value
+                                   遍历出来的参数中,第一个是value值,第二个才是key值
+                                   
+                                   遍历数字,从1开始一直显示到传入的数字为止,例如下面打印1-8
+                                   遍历字符串,将传入的字符串的每一个字母都展示出来,例如下面打印出shanshan的每一个字母
+
+                                   同时要遍历多个元素时,可以使用template,像v-if一样同时包裹多个元素一起遍历,而且template不会出现在页面中
+                                   但是key值不能绑定在template上,只能绑定在真实的元素身上,如果用index值为key值的话,用模板字符串加上_数字对每一个key值做上标记
+    -->
+    <div id="app">
+        <div v-for="(item,index) in arr" :key="index">{{item}}--{{index}}</div>
+        <div v-for="(value,key) in obj">{{key}}--{{value}}</div>
+        <div v-for="item in 8">{{item}}</div>
+        <div v-for="item in 'shanshan'">{{item}}</div>
+
+        <template v-for="(item,index) in arr">
+            <div :key="`${index}_1`" :_key="`${index}_1`">{{item}}</div>
+            <span :key="`${index}_2`" :_key="`${index}_2`">{{item}}</span>
+        </template>    
+
+        <!-- 实现点击时不会清空输入框的内容,因为两个input框是一样的,dom元素尽量节省性能,两个一样的dom默认不发生改变,这时我们可以添加key属性取不同的名字 -->
+        <div v-if="flag">
+            <label for="name">姓名</label>
+            <!-- 添加key属性在元素身上看不到 -->
+            <!-- 这里直接是给元素添加一个属性key,值为自己设置的,如果是添加data里面的数据的话,需要用到v-bind:进行绑定 -->
+            <input type="text" id="name" key="name">
+        </div>
+        <div v-else>
+            <label for="age">年龄</label>
+            <input type="text" id="age" key="age">
+        </div>
+        <button v-on:click="onClick">点击切换</button>
+    </div>
+    <script>
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                flag : true,
+                arr : [1,2,3,2],
+                obj : {
+                    name : 'huhao',
+                    age : 18,
+                    desc : 'nice'
+                }
+            },
+            methods : {
+                onClick() {
+                    this.flag = !this.flag;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

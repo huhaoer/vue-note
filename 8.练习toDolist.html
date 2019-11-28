@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- $event代表事件对象e
+        可以不给事件传入参数,直接使用键盘修饰符就可以监听是什么事件,例如keyup事件,直接@keyup后面.enter或者13就可以监听键盘事件了
+        v-model的修饰符 .lazy让输入的数据不会跟着同步出现在页面上,直到离开输入框时才在页面上渲染数据
+                       .number让输入框里面的数字变为数字类型的值,其他字符串还是字符串,不能改变
+                       .trim让输入框里面的值前后的空格都消失,但是中间的空格还是会存在
+    -->
+    <div id="app">
+        <input type="text" v-model.lazy="task" @keyup.enter-key="addTask" @keyup.define-key="addTask">
+        <button @click="addTask">提交</button>
+        <p>正在添加的任务:{{task}}</p>
+        <h4>所有任务:</h4>
+        <ul>
+            <li v-for="(item,index) in taskList" :key="index">
+                {{item}}
+                <button @click="removeTask(index)">删除</button>
+            </li>
+        </ul>
+    </div>
+    <script>
+        // 给修饰符的键名自定义名字,对应键值  上面绑定enter-key在@keyup事件后面,然后点击13对应的回车键,也可以实现按键提交任务
+        Vue.config.keyCodes = {
+            'enter-key' : 13,//enter键对应的keycode值
+            'define-key' : 16//shift对应的keycode值
+        }
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                task : '',//输入框输入的内容展示到正在添加的任务
+                taskList : []//将输入框输入的内容保存到一个数组,在所有任务中展示
+            },
+            methods : {
+                addTask () {
+                    // if(type == 'keyup' && e.keyCode != 13){//判断是点击键盘事件且不是点击的回车键  就返回不进行任何操作
+                    //     return;
+                    // }
+                    this.taskList.push(this.task)
+                    this.task = ''
+                },
+                removeTask(index) {
+                    this.taskList.splice(index,1)//传入的是taskList中的每一项任务对应的索引值 splice截取,从index项截取1位
+                }
+            }
+        })
+    </script>
+</body>
+</html>

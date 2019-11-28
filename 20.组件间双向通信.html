@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        当前计数:{{count}}
+        <hr>
+        <!-- 对应的是用:value + @input的方式 -->
+        <!-- <my-count :value="count" @input="onMyInput"></my-count> -->
+
+        <!-- 对应的是直接用v-model代替:value和@input的方法,所以在组件身上传递的数据变量必须是value,因为注册props时是value
+             而且下面$emit('input')传递的类型也必须是input类型,因为组件身上@input是监听的input事件
+        -->
+        <!-- <my-count v-model="count"></my-count> -->
+        
+        <!-- 用:value.sync  下面$emit触发事件必须是update:value  注册的props也是value -->
+        <my-count :value.sync="count"></my-count>
+    </div>
+    <script>
+
+        // 组件中的mounted函数获得传进来的count数值的变量value并加一,然后触发一个函数取名input传参就是value值加一,在外部<my-count>组件身上
+        // 接收监听触发的input这个函数,然后在methods方法中实现改变count的值为触发事件时传递的值(value + 1) 
+        // :value + @input 就是语法糖v-model 用v-model代替前面这两个
+        
+        // Vue.component('myCount', {
+        //         template: `<div>{{value}}</div>`,
+        //         props: ['value'],
+        //         mounted() {
+        //             setInterval(() => {
+        //                 const val = this.value + 1;
+        //                 this.$emit('input', val)
+        //             }, 1000);
+        //         }
+        //     })
+        //     const vm = new Vue({
+        //         el: '#app',
+        //         data: {
+        //             count: 100
+        //         },
+        //         methods: {
+        //             onMyInput(val) {
+        //                 this.count = val;
+        //             }
+        //         }
+        //     })
+
+        // :value + @update:value(update:value是一个监听的事件名称,有些奇怪,但是配合前面的:value就是语法糖) 
+        // 就是语法糖.sync,直接在:value后面.sync就可以了 :value的value属性可以是任何值,update:value后面的value也要跟着改变,下面$emit触发的事件也要随着改变
+
+        
+        Vue.component('myCount',{
+            template : `<div>{{value}}</div>`,
+            props : ['value'],
+            mounted() {
+                setInterval(() => {
+                    const val = this.value + 1;
+                    this.$emit('update:value', val)
+                }, 1000);
+            }
+        })
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                count : 100
+            },
+            methods : {
+                onMyInput(val) {
+                    this.count = val;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 在使用的组件身上绑定data里面需要使用的数据,然后在组件内部的props里注册属性 -->
+        <my-content :title="title" :content="content"></my-content>
+    </div>
+    <script>
+        // 数据传递就是将data里面的数据通过绑定给组件身上的一个属性:title="title",这时被绑定的属性title必须在组件内部的props注册,然后才在template中使用注册的属性
+
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                title : '我是标题',
+                content : '我是内容'
+            },
+            components : {
+                myContent : {
+                    // props : ['title','content'],//传递数组,注册组件身上的属性,然后才能在模板中使用
+                    props : {//传递对象,对注册的属性进行校验
+                        title : {
+                            type : String,//注册属性的类型
+                            required : true,//注册属性是否必须传递
+                            default : 'abc',//注册属性的默认值,如果引用组件时没有传递该注册事件,那么默认值就是default中的内容
+                            validator(value) {//value值就是上面绑定的:title的值(我是标题),用来校验它的长度是否大于5,不大于的话会有警告
+                                return value.length > 5
+                            }
+                        },
+                        content : {
+                            type : String,
+                            // required : true
+                            default : 'aaaaaaaaaa'
+                        },
+                        arr : {
+                            type : Array,
+                            // 引用值的默认值设置要用函数
+                            default : ()=> [1,2,3]
+                        }
+                    },
+                    // template中使用的数据都是从props注册的数据中获得,只要props中有的属性,在template中都可以使用
+                    // arr中的数据没有从data数据里传递,使用默认值,然后再模板中可以使用
+                    template : `<div>
+                         {{arr}}
+                        <h1>{{title}}</h1>
+                        <p>{{content}}</p>
+                    </div>`
+                }
+            }
+        })
+    </script>
+</body>
+</html>

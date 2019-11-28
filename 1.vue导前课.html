@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 浏览器渲染过程
+        // 1.解析html,构建DOM树
+        // 2.解析css,生成css规则树
+        // 3.合并DOM树和css树,生成render树
+        // 4.布局render树,负责元素尺寸和位置的计算
+        // 5.绘制render树,绘制页面像素信息  (元素尺寸位置等发生改变,触发重排)
+        // 6.浏览器将各层信息发给GPU,GPU将各层合成 (重排后会触发重绘 单独修改元素的颜色也会重绘)
+
+        // 触发重排的属性
+        /*
+            offsetTop offsetLeft offsetWidth offsetHeight
+            scrollTop scrollLeft scrollWidth scrollHeight
+            clientTop clientLeft clientWidth clientHeight getComputedStyle()
+        */
+
+        // vue优点
+        /*
+        1.性能更好  操作虚拟dom,不会操作真实dom,不消耗性能
+        2.视图、数据相分离  在html中操作视图,在script中操作数据
+        3.维护成本低    代码量较少,便于个人维护,不需要太大人力
+        */
+        // 渐进式js框架 什么需求都可以使用,随着需求增加使用的东西也就越多,都可以用vue来写
+        // MVVM M:model V:view  VM:viewModel 相当于道路桥梁,view(dom)通过一些事件对数据进行影响,Model(data数据)通过数据绑定影响dom元素
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    <!-- 开发版本,有提示警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        div:last-of-type {
+            width: 100px;
+            height: 100px;
+        }
+        .red {
+            background-color: red;
+        }
+        .blue {
+            background-color: blue;
+        }
+        .yellow {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <!-- vue指令
+    1.v-bind:属性 作用是绑定属性,给元素身上的属性传递data里面的值时需要用v-bind绑定属性在""里传入data的值  v-bind:可以简写为:符号
+    绑定class时: 1.同时绑定多个类名的话用一个数组将data里面的属性包裹起来,可以传递多个类名
+                2.判断为true时才显示类名的话用对象,相应的传递key和value值 {red : flag},前面的key值直接代表了类名
+                3.前面绑定的class会覆盖后面的class,所以将绑定的类名写在一个里面
+
+    绑定style时: 1.将style的css属性写在一个对象里,然后绑定在style时,传入data里面的样式对象
+                2.想绑定多个样式时,也可以像class绑定一样,变为数组,向里面传递多个值
+                3.:style的权重大于style,如果后面有:style绑定事件的话,那么前面的style样式就会被覆盖掉
+    2.v-on:事件名(click等等) 作用是给元素绑定事件,绑定好的事件在Vue对象里面的新属性methods里面 v-on:可以简写为@符号
+            绑定事件名不要和data里面的属性名冲突,因为会首先查找data里面的属性,重名的话会将事件覆盖
+    -->
+    <div id="app">
+        <div :style="{width:'100px',height:'100px',backgroundColor:color}" :style="[domStyle,domStyle1]">我是文字</div>
+        <img :src="imgUrl" alt="" :class="{leiming : flag}" v-bind:class="[blueClass,redClass, flag ? 'yellow' : '']">
+        <button v-on:click="change('red')">red</button>
+        <button @click="change('blue')">blue</button>
+        <button @click="change('yellow')">yellow</button>
+        <div :class="color"></div>
+    </div>
+    <script>
+        const vm  = new Vue({
+            el : '#app',
+            data : {
+                imgUrl : "https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=319032401,1331114495&fm=27&gp=0.jpg",
+                blueClass : 'blue',
+                redClass : 'red',
+                flag : true,
+                color : '#000',
+                domStyle : {width:'100px',height:'100px',backgroundColor:'blue'},
+                domStyle1 : {color:'#fff'}
+            },
+            methods : {
+                change (color) {
+                    this.color = color;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- el渲染
+    el存在 -> div#app.outerHTML("<div id="app">{{msg}}<div/>"作为模板) -> AST抽象语法树 -> render渲染 -> vnode虚拟节点 -> 真实的dom<div id="app">hello</div> -> 替换为真实的dom
+    el不存在 -> 查找$mount -> div#app.outerHTML("<div id="app">{{msg}}<div/>"作为模板) -> AST抽象语法树 -> render渲染 -> vnode虚拟节点 -> 真实的dom<div id="app">hello</div> -> 替换为真实的dom
+                $mount不存在 -> 不进行渲染
+    -->
+    <!-- 流程
+                el是否存在 --no-- $mount是否存在 --no-- 不渲染
+                    |                   |
+                    yes                 yes
+                    |                   |
+                是否存在template     是否存在template
+                    |       |           |
+                    yes     no     <----|
+                    |       |
+    作为模板一系列渲染    用$el.outerHTML为模板
+    -->
+    <div id="app">
+        {{msg}}
+    </div>
+    <script>
+        const vm = new Vue({
+            el : '#app',
+            template : '<h2>{{msg}}</h2>',
+            // 有了render函数,上面的模板就会被改变
+            render(createElement) {
+                // 第一个参数是标签名
+                // 第二个参数是标签的属性,用对象表示
+                // 第三个属性是标签的内容   如果里面想嵌套标签或者添加更多内容,用数组传递,可以用createElement在创建一个标签作为内容
+                return createElement('h1',{
+                    class : 'haha',
+                    style : {
+                        color : 'red',
+                        fontSize : '30px',
+                        border : '1px solid blue'
+                    }
+                },['我是h1标签',createElement('p',{
+                    style : {
+                        color : 'green',
+                        fontSize : '10px'
+                    }
+                },'我是p标签')])
+
+                // jsx语法 js写在{}中 dom写在<>中
+                // const tag = 'div'
+                // return (<tag class="haha"
+                //              style={{color : 'red', fontSize : '20px'}}
+                //              on-click={() => {
+                //                  console.log('haha')
+                //              }}
+                //             >
+                //         <span>我是创建的文本</span>    
+                // </tag>)
+            },
+            data : {
+                msg : 'hello'
+            }
+        })
+    </script>
+</body>
+</html>

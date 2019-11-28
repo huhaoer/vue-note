@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <my-count :value="count" @input="handleInput"></my-count>
+        <hr>
+        {{count}}
+        
+    </div>
+    <script>
+        const vm = new Vue({
+            el : '#app',
+            methods : {
+                handleInput(val) {
+                    this.count = val;
+                }
+            },
+            data() {
+                return {
+                    count : 100
+                }
+            },
+            components : {
+                myCount : {
+                    props : ['value'],
+                    template : `<div>{{value}}</div>`,
+                    mounted() {
+                        setInterval(() => {
+                            const val = this.value + 1;
+                            this.$emit('input', val)
+                        }, 1000);
+                        
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

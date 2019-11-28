@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <!-- 过滤器
+    Vue.filter过滤  第一个是过滤函数的名称,第二个参数是一个函数,接收一个值是toMoney前面的值
+    filter函数的返回值就是最后直接显示在页面的数据
+    -->
+    <div id="app">
+        <!-- 前面写过滤的数据,用一根竖线隔开,后面是过滤函数的函数名,可以接收参数,但是函数的第一位参数还是竖线前面的值,后面才是自己传递的参数 -->
+        {{money | toMoney(2) | ceshi}}
+    </div>
+    <script>
+        // 全局过滤器
+        Vue.filter('toMoney',(value,times) => {
+            // 接收前面的money值1000000,再通过自己传递的参数times乘2 然后返回2,000,000
+            return (value * times).toLocaleString();
+        })
+        Vue.filter('ceshi',value => {
+            // 后面可以连续调用过滤器,值还是竖线前面的那一个值,最后一个过滤器返回的值是最终显示的值
+            return value.toLocaleString();
+        })
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                money : 1000000
+            },
+            // 定义局部的过滤器
+            filters : {
+                toMoney : (value) => {
+                    return value*2;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

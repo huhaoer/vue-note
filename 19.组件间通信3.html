@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <my-input></my-input>
+        <hr>
+        <my-content></my-content>
+    </div>
+    <script>
+        // 兄弟组件之间数据信息的传递
+        // event bus事件总线 就是在原型上新建一个Vue实例,用bus变量接收
+        Vue.prototype.bus = new Vue();
+        const vm = new Vue({
+            el : '#app',
+            components : {
+                myContent : {
+                    data() {
+                        return {
+                            content : ''
+                        }
+                    },
+                    created() {
+                        // 在另一个组件的生命周期函数中进行监听this.bus.$emit的新实例上面的方法,相当于绑定一个方法clickk
+                        // 参数value就是$emit('clickk',this.inputValue)传递的参数inputValue
+                        // 相当于接收订阅   在新实例上面绑定一个函数,是实例上新发布的函数,这里拿来使用
+                        this.bus.$on('clickk',(value) => {
+                            this.content = value
+                        })
+                    },
+                    template : `<div>{{content}}</div>`
+                },
+                myInput : {
+                    data() {
+                        return {
+                            inputValue : ''
+                        }
+                    },
+                    methods : {
+                        handClick() {
+                            // console.log(this.inputValue)
+                            // 在新的实例上触发组件上面的事件并传递参数是当前输入框的内容
+                            // 相当于发布订阅   在新实例上面发布一个新函数并传递参数
+                            this.bus.$emit('clickk',this.inputValue);
+                            this.inputValue = ''
+                        }
+                    },
+                    template : `<div>
+                                <input type="text" v-model.lazy="inputValue">
+                                <button @click="handClick">提交</button>
+                                </div>`
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{ name }}
+    </div>
+    <script>    
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                name : 'huhao'
+            },
+            beforeCreate() {
+                //不常用  创建之前不能获取到data里面的数据
+                console.log(this.$data)
+                console.log('beforeCreate')
+            },
+            created() {
+                //调用ajax  可以获取到data里面的数据
+                console.log(this.$data)
+                console.log(this.$el)//获取不到
+                console.log('created')
+            },
+            beforeMount() {// 挂载之前
+                //不常用  获取的el是初始创建的div标签<div id="app">{ { name } }</div >
+                console.log(this.$el)
+            },
+            mounted() {//挂载完毕
+                // 当实例对象挂载到数据渲染完成dom身上时,也用来发送ajax请求
+                // 打印的是将数据添加进去的el   <div id="app">huhao</div >
+                console.log(this.$el)
+            },
+            beforeUpdate() {//数据更新之前
+                // 在data里面的数据发生变化之前执行的函数,直到改变了data里面的数据改变时该函数才执行
+                this.name = 'shanshan'
+                console.log('beforeUpdate')
+            },
+            updated() {//数据更新完执行的函数
+                // 用vm.name = 'haha'执行,然后先将name值变为shanshan,打印beforeUpdate,在打印updated
+                console.log('updated')
+            },
+            beforeDestroy() {//实例对象销毁之前
+                // 一般用作清理定时器的作用
+                console.log('beforeDestroy')
+            },
+            destroyed() {//销毁完成
+                console.log('destroyed')
+            }
+        })
+    </script>
+</body>
+</html>

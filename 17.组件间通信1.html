@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <my-content :title="title" :content="content" :msg="msg"></my-content>
+    </div>
+    <script>
+        // 父组件向子组件传递数据
+        // $attrs是传递的数据中没有进行注册的剩下的数据,例如下面的msg和content
+        /*
+        组件间通信:
+        一:传统方式
+        1.通过父组件传递给子组件,其中子组件不用的数据再通过绑定给孙组件
+        2.父组件只给子组件传递子组件需要的数据,在#app的div中还是正常传递数据,然后在父组件的注册信息中只注册自己需要的数据
+        剩下不用的数据在vm.$attrs中,子组件通过传递$attrs.content给孙组件传递数据  还有一种传递是传递多个数据用v-bind="$attrs"
+        将所有没注册的数据都传递给孙组件,但是会在#app上显示出没注册的数据,需要给父组件设置一个属性inheritAttrs : false来去掉这些多余的数据
+        
+        二:$parent和$children
+        父组件可以通过$children获得子组件的数据,子组件可以通过$parent获得父组件的数据
+
+        myContent组件中设置生命周期函数,不用注册和传值了
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                title : '我是标题题题题题题题题题',
+                content : '我是内容容容容容容',
+                msg : '我是信息息息息息息息'
+            },
+            components : {
+                myContent : {
+                    created() {
+                        this.title = this.$parent.title
+                    },
+                    template: `<div>
+                            <h2>{{title}}</h2>
+                            <my-p></my-p>
+                            </div>`,
+                    components : {
+                        myP : {
+                            created(){
+                                this.content = this.$parent.$parent.content
+                            },
+                            template : `<p>{{content}}</p>`
+                        }
+                    }
+                }
+            }
+        })
+
+        三:provide和inject
+        用provide的对象来代替data的对象,将数据传在provide里面,然后在下面组件里面直接inject['title']获得数据
+        const vm = new Vue({
+            el : '#app',
+            provide : {
+                title : '我是标题题题题题题题题题',
+                content : '我是内容容容容容容',
+                msg : '我是信息息息息息息息'
+            },
+            components : {
+                myContent : {
+                    inject : ['title'],
+                    template: `<div>
+                            <h2>{{title}}</h2>
+                            <my-p></my-p>
+                            </div>`,
+                    components : {
+                        myP : {
+                            inject: ['content'],
+                            template : `<p>{{content}}</p>`
+                        }
+                    }
+                }
+            }
+        })
+        */
+        // 传统方式
+        const vm = new Vue({
+            el : '#app',
+            data : {
+                title : '我是标题题题题题题题题题',
+                content : '我是内容容容容容容',
+                msg : '我是信息息息息息息息'
+            },
+            components : {
+                myContent : {
+                    inheritAttrs : false,
+                    props: ['title'],
+                    template: `<div>
+                            <h2>{{title}}</h2>
+                            <my-p v-bind="$attrs"></my-p>
+                            </div>`,
+                    components : {
+                        myP : {
+                            props: ['content','msg'],
+                            template : `<div>
+                                            <p>{{content}}</p>
+                                            <p>{{msg}}</p>
+                                        </div>`
+                        }
+                    }
+                }
+            }
+        })
+        
+    </script>
+</body>
+
+</html>

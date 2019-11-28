@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <div ref="dom">div</div>
+        <my-component ref="mcmp" @click="func" @mousedown="down" @like="like"></my-component>
+    </div>
+    <script>
+        // 子组件向父组件传递数据
+        // ref引用,在dom元素或者组件身上绑定ref="名字"  然后在根组件内可以获得元素或者组件的引用,也获得了他们身上的方法和属性
+        // 给组件添加修饰符.native可以监听原生的事件  @click.native="func",点击组件任何部分都可以触发methods里面的func方法打印'func'
+        // $listeners是可以获得通过v-on绑定的事件
+        const vm = new Vue({
+            el : '#app',
+            methods : {
+                func(data){
+                    console.log(data)
+                },
+                down() {
+                    console.log('down')
+                },
+                like() {
+                    console.log('like')
+                }
+            },
+            mounted() {
+                console.log(this.$refs.dom)//获得dom引用
+                console.log(this.$refs.mcmp)//获得组件引用,就是下面的组件实例
+                console.log(this.$refs.mcmp.msg)
+                this.$refs.mcmp.cmpFunc()
+            },
+            components : {
+                myComponent : {
+                    data() {
+                        return {
+                            msg : 'hello world'
+                        }
+                    },
+                    methods : {
+                        cmpFunc(){
+                            console.log('cmpFunc')
+                        },
+                        addFunc() {
+                            // this.$listeners获得的是组件身上绑定的click的func方法,是根实例methods里面的
+                            // 这里获取到然后.click执行传递参数是组件的msg,在methods里面就可以打印出信息
+                            // 通过点击组件按钮,将组件信息传递到根实例的methods方法中执行
+                            // this.$listeners.click(this.msg)
+
+                            // 通过$emit('click',this.msg)也可以触发组件上监听的函数,然后传参msg,在methods里的func中执行
+                            this.$emit('click',this.msg);
+                            this.$listeners.like();
+                            this.$emit('like');//监听自定义不能用v-on绑定,必须在每一个事件绑定中通过$emit或者$listeners执行
+                        },
+                        addDown() {
+                            // 如果是同时监听多个事件,$attrs可以用v-bind绑定所有事件,而$listeners可以用v-on来接收所有v-on绑定的函数
+                            // 监听每一个事件的时候要将每一个函数写出来而且再组件中写一个方法并用$listener或者$emit接收外面的监听函数,可以传递参数,但是麻烦 
+                            // 用v-on="$listeners"监听所有时不用自己写函数,会直接执行组件身上的函数,不能传递参数,但十分方便
+                            this.$emit('mousedown');
+                            
+                        }
+                    },
+                    template : `<div>我是一个div
+                                <button @click="addFunc" @mousedown="addDown">点击</button>
+                                <button v-on="$listeners">CLICK</button>
+                                </div>`
+                }
+            }
+        })
+    </script>
+</body>
+</html>

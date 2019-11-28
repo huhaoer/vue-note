@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 插值表达式,里面传入表达式,可以在页面直接显示出结果 -->
+        <!-- 我们使用的数据,需要在data中存在 -->
+        <!-- 数据要先存在,才能实现数据绑定,不然更改一个不存在的数据是不会渲染的  例如vm.obj.xxx = 100不会改变,要改obj.school或者obj.home的值 -->
+        <!-- 可以用$set来改变值,并渲染到页面中  vm.$set(vm.obj, 'money', 100)第一个值传入要改变的data值,第二个值传入具体哪一个值,第三个值传入改变成什么值 -->
+
+        <!-- vm.$el可以获得绑定渲染的dom元素,此时为<div id="app"></div> -->
+        <!-- vm.$mount('#app') 用vm身上的方法$.mount可以像el一样将Vue挂载到元素身上去-->
+
+        <!-- 通过索引的方式去修改数组,不能渲染页面 vm.arr[0] = 100  会修改数据但是不会渲染 -->
+        <!-- 通过改变数组的长度也不能渲染页面   --vm.arr.length 数据会被改变但是不会渲染 -->
+        <!-- 数组变异方法,在vue里面重写了  push、pop、shift、unshift、sort、reverse、splice会改变数组的数据渲染 -->
+        {{ 1 + 1 }}
+        {{ age }}
+        {{ arr }}
+        {{ obj }}
+        <!-- {{ a }}    直接输出data里面没有的属性会报错 作用域没有会报错-->
+        <!-- {{ obj.xx }}   输出obj上的属性会打印undefined  原型链上没有会打印Undefined,不显示内容也不会再页面报错 -->
+    </div>
+    <script>
+        // 用一个变量接收new Vue,将data里面的数据都代理给了vm,可以直接通过vm来修改data里面的值
+        const vm = new Vue({
+            el : '#app',//可以用vm.$mount('#app')代替,挂载Vue到dom元素身上
+            data : {//绑定的数据在data里面
+                name : 'huhao',
+                age : 18,
+                arr : [1,2,3],
+                obj : {
+                    school : 'hope',
+                    home : 'dazhou'
+                }
+            }
+        })
+
+        vm.name = 'shanshan';
+        vm.name = 'shan';
+        vm.age = 20;
+        vm.age = 15;
+        vm.obj.school = 'duyi';
+
+        
+        vm.$nextTick(() => {
+            console.log(vm.$el.innerText)
+        })
+        // 用vm.$nextTick(() => {})传入一个函数,可以将最后渲染完成的数据打印出来,即打印改变后的数据,实时渲染
+
+        // console.log(vm.$el.innerText)
+        //打印的还是最开始绑定的数据,下面并不会将数据改变
+        // 下面改变数据的过程是异步的,先将vm.name = 'shanshan'放入队列中然后vm.name = 'shan'覆盖 又将vm.age = 20放入队列vm.age = 15;再覆盖
+        // 执行js主线程的console.log(vm.$el.innerText)打印原数据,然后在异步执行队列中的改变数据
+    </script>
+</body>
+</html>
